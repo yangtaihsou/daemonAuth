@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <bean id="authorityDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${profile.jdbc.driverClassName}"/>
+        <property name="url" value="${profile.datasource.url}"/>
+        <property name="username" value="${profile.datasource.username}"/>
+        <property name="password" value="${profile.datasource.password}"/>
+        <property name="maxActive" value="50"/>
+        <property name="maxIdle" value="40"/>
+        <property name="minIdle" value="20"/>
+        <property name="initialSize" value="10"/>
+        <property name="maxWait" value="15000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="180000"/>
+    </bean>
+
+    <bean id="authoritySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="authorityDataSource"/>
+        <property name="typeAliasesPackage" value="com.daemonauth.domain"/>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:sqlmap/*Mapper.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="authorityMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="authoritySqlSessionFactory"/>
+        <property name="basePackage" value="com.daemonauth.dao"/>
+    </bean>
+
+
+    <bean id="authorityTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="authorityDataSource"/>
+    </bean>
+</beans>

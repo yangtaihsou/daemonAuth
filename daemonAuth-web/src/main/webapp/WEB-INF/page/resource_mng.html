@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>资源管理</title>
+    #parse("header.html")
+    <script>
+        var dics = {
+            nodeType: $customTag.getDicJson("nodeType"),
+            status: {true: "有效", false: "无效"}
+        };
+    </script>
+</head>
+<body>
+<div id="rrapp">
+    <div class="form-horizontal" style="width: auto;padding:20px">
+        <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">资源编码：</label>
+            <div class="col-md-2">
+                <input class="form-control" name="resourceCodeLike" v-model="params.resourceCodeLike"/>
+            </div>
+            <label class="col-md-1 control-label">资源名称：</label>
+            <div class="col-md-2">
+                <input class="form-control" name="resourceName" v-model="params.resourceName"/>
+            </div>
+            <label class="col-md-1 control-label">资源URL：</label>
+            <div class="col-md-2">
+                <input class="form-control" name="resourceUrl" v-model="params.resourceUrl"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">上级编码：</label>
+            <div class="col-md-2">
+                <input class="form-control" style="cursor:pointer;" @click="menuTree" readonly="readonly"
+                       name="parentName" v-model="params.parentName" placeholder="点击选择"/>
+            </div>
+            <label class="col-md-1 control-label">节点类型：</label>
+            <div class="col-md-2">
+                <select class="form-control" name="nodeType" v-model="params.nodeType">
+                    <option value="">请选择</option>
+                    $customTag.options("nodeType")
+                </select>
+            </div>
+            <label class="col-md-1 control-label">有效/无效：</label>
+            <div class="col-md-2">
+                <label class="radio-inline">
+                    <input type="radio" name="enable" value="true" v-model="params.enable">有效
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="enable" value="false" v-model="params.enable">无效
+                </label>
+            </div>
+        </div>
+        <div class="form-group" style="margin-top: 30px;">
+            <div class="col-md-offset-5">
+                <button type="button" class="btn btn-success" @click="query">查询(请选择上级编码)</button>
+                &nbsp;&nbsp;<button type="button" class="btn btn-default" @click="create">新增</button>
+                通过选择上级编码，设置资源展示顺序的保存
+                &nbsp;&nbsp;<button type="button" class="btn btn-default" id="saveDisplayIndex" style="display:none">
+                保存展示顺序
+            </button>
+                <button type="button" class="btn btn-default" @click="batchExport">批量导入</button>
+            </div>
+
+            <div id="saveDisplayIndexMsg" class="col-md-offset-5" style="color: #ff0000"></div>
+
+        </div>
+    </div>
+</div>
+
+<form id="updateDisplayForm">
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</form>
+</div>
+
+<!-- 选择菜单 -->
+<div id="menuLayer" style="display: none;padding:10px;">
+    <ul id="menuTree" class="ztree"></ul>
+</div>
+
+<div id="sourceMenuLayer" style="display: none;padding:10px;">
+    <ul id="sourceMenuTree" class="ztree"></ul>
+</div>
+
+
+<script src="${rc.contextPath}/js/resource_mng.js?t=${date.systemTime}"></script>
+</body>
+</html>

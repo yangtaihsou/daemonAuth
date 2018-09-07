@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>资源维护</title>
+    #parse("header.html")
+    <link rel="stylesheet" href="${rc.contextPath}/statics/css/main.css">
+</head>
+<body>
+<div class="panel panel-default" id="rrapp" v-cloak>
+    <div class="panel-heading">{{title}}</div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">角色编码：</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="roles.roleCode" placeholder="角色编码"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">角色名称：</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="roles.roleName" placeholder="角色名称"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">系统编码：</div>
+            <div class="col-sm-10">
+                <select class="form-control" v-model="roles.systemCode" @change="selectVal">
+
+                    <option value="">请选择</option>
+                    <option v-for="option in resources" v-bind:value="option.resourceCode">
+                        {{ option.resourceName }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div id="authorization" class="form-group" style="display: none;">
+            <div class="col-sm-2 control-label">授权：</div>
+            <div class="col-sm-10" style="max-height: 500px;overflow-y: scroll">
+                <ul id="menuTree" class="ztree"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label"></div>
+            <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="保存"/>
+            <!--&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="back" value="返回"/>-->
+        </div>
+    </form>
+</div>
+
+<script src="${rc.contextPath}/js/role_add.js?_${date.systemTime}"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daemonauth.dao.UsersRolesMapper">
+    <sql id="whereSelectiveSql">
+        <if test="query!= null">
+            <if test="query.id != null">
+                and id = #{query.id}
+            </if>
+
+            <if test="query.userPin != null and query.userPin!=''">
+                and userpin = #{query.userPin}
+            </if>
+
+            <if test="query.userName != null and query.userName!=''">
+                and username = #{query.userName}
+            </if>
+
+            <if test="query.roleCode != null and query.roleCode!=''">
+                and rolecode = #{query.roleCode}
+            </if>
+
+            <if test="query.roleName != null and query.roleName!=''">
+                and rolename = #{query.roleName}
+            </if>
+
+            <if test="query.enable != null">
+                and enable = #{query.enable}
+            </if>
+
+            <if test="query.createDate != null">
+                and createDate = #{query.createDate}
+            </if>
+
+            <if test="query.systemCode != null">
+                and systemCode = #{query.systemCode}
+            </if>
+
+        </if>
+    </sql>
+
+    <!--usersroles表所有字段-->
+    <sql id="Base_Column_List">
+        id ,   <!---->
+        userpin ,   <!---->
+        username ,   <!---->
+        rolecode ,   <!---->
+        rolename ,   <!---->
+        enable ,   <!---->
+        systemCode,
+        createDate ,   <!---->
+        updateTime     <!---->
+    </sql>
+
+    <!--usersroles表除了主键id的所有字段-->
+    <sql id="Base_Column_List_WithOutPk">
+        userpin ,  <!---->
+        username ,  <!---->
+        rolecode ,  <!---->
+        rolename ,  <!---->
+        enable ,  <!---->
+        systemCode,
+        createDate ,  <!---->
+        updateTime        <!---->
+    </sql>
+
+    <!--javabean除了主键id的所有字段-->
+    <sql id="Javabean_Column_List_WithOutPk">
+        #{userPin} ,                    <!---->
+        #{userName} ,                    <!---->
+        #{roleCode} ,                    <!---->
+        #{roleName} ,                    <!---->
+        1 ,                        <!---->
+        #{systemCode},
+        now() ,                        <!---->
+        now()                         <!---->
+    </sql>
+
+    <!--查找usersroles表所有数据-->
+    <select id="findAll" resultType="UsersRoles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM usersroles
+    </select>
+    <!--统计usersroles表的数据总量-->
+    <select id="findCount" parameterType="Integer" resultType="java.lang.Long">
+        SELECT count(id )
+        FROM usersroles where 1=1 ,
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找usersroles表相应数据-->
+    <select id="queryBySelective" parameterType="UsersRoles" resultType="UsersRoles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM usersroles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找usersroles表相应数据的总量-->
+    <select id="queryCountBySelective" parameterType="UsersRoles" resultType="java.lang.Long">
+        SELECT
+        count(id )
+
+        FROM usersroles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据主键id，查找usersroles表的唯一数据-->
+    <select id="queryByPrimaryKey" parameterType="Integer" resultType="UsersRoles">
+
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM usersroles where id = #{id}
+    </select>
+
+    <!--根据主键id，删除usersroles表的唯一数据-->
+    <delete id="deleteByPrimaryKey" parameterType="Integer">
+        DELETE FROM usersroles WHERE id = #{id}
+    </delete>
+
+    <!--根据主键id，更新usersroles表相应数据-->
+    <update id="updateByPrimaryKeySelective" parameterType="UsersRoles">
+        UPDATE usersroles
+        <set>
+            <if test="id != null">
+                id=#{id},
+            </if>
+            <if test="userPin != null">
+                userpin=#{userPin},
+            </if>
+            <if test="userName != null">
+                username=#{userName},
+            </if>
+            <if test="roleCode != null">
+                rolecode=#{roleCode},
+            </if>
+            <if test="roleName != null">
+                rolename=#{roleName},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="systemCode != null">
+                systemCode=#{systemCode},
+            </if>
+            <if test="updateTime != null">
+                updateTime=#{updateTime},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--保存数据-->
+    <insert id="save" parameterType="UsersRoles">
+        INSERT INTO usersroles
+        (
+        <include refid="Base_Column_List_WithOutPk"/>
+        )
+        VALUES
+        (
+        <include refid="Javabean_Column_List_WithOutPk"/>
+        )
+    </insert>
+
+    <!--根据条件，分页查找usersroles表相应数据-->
+    <select id="queryBySelectiveForPagination" parameterType="UsersRoles" resultType="UsersRoles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM usersroles where 1=1
+        <include refid="whereSelectiveSql"/>
+        order by id LIMIT #{startRow} , #{pageSize}
+    </select>
+
+    <!--根据条件，分页查找usersroles表相应数据的总量-->
+    <select id="queryCountBySelectiveForPagination" parameterType="UsersRoles" resultType="java.lang.Long">
+        SELECT
+        count(id )
+        FROM usersroles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+
+    <delete id="deleteByUniqueIndexuserPinroleCode" parameterType="UsersRoles">
+            DELETE FROM usersroles WHERE      userpin=#{userPin} and      rolecode=#{roleCode} and   1=1
+        </delete>
+    <delete id="deleteByUserPinAndSysCode" parameterType="UsersRoles">
+            DELETE FROM usersroles WHERE      userpin=#{userPin} and      systemCode=#{systemCode} and   1=1
+        </delete>
+    <delete id="deleteByCommonIndexroleCode" parameterType="UsersRoles">
+            DELETE FROM usersroles WHERE      rolecode=#{roleCode} and   1=1
+        </delete>
+    <delete id="deleteByCommonIndexuserPin" parameterType="UsersRoles">
+            DELETE FROM usersroles WHERE      userpin=#{userPin} and   1=1
+        </delete>
+</mapper>

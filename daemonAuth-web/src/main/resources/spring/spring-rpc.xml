@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+    <bean id="httpClient" class="com.daemonauth.export.proxy.PoolingHttpClient">
+        <property name="connectTimeout" value="10000"></property>
+        <property name="readTimeout" value="50000"></property>
+        <property name="waitTimeout" value="1000"></property>
+        <property name="totalMaxConnection" value="2000"></property>
+    </bean>
+
+    <bean id="authorityResource" class="com.daemonauth.export.proxy.RestResourceClientProxyFactoryBean">
+        <property name="serviceInterface" value="com.daemonauth.export.rpc.AuthorityResourceService"></property>
+        <property name="baseUri" value="http://127.0.0.1"></property>
+        <property name="httpClient" ref="httpClient"></property>
+    </bean>
+
+
+    <!--<bean id="authorityData" class="AuthorityResourcesLoad"  lazy-init="true"/>-->
+    <bean id="authorityDataConfig" class="com.daemonauth.service.common.AuthorityDBLoad"/>
+
+</beans>

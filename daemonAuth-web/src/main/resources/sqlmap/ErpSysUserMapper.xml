@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daemonauth.dao.ErpSysUserMapper">
+
+
+    <!--根据条件，查找erpsysuser表相应数据-->
+    <select id="queryBySelective" parameterType="ErpSysUser" resultType="ErpSysUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM erpsysuser where
+        <include refid="whereQuerySelectiveSql"/>
+        1=1
+    </select>
+
+    <!--根据条件，查找erpsysuser表相应数据的总量-->
+    <select id="queryCountBySelective" parameterType="ErpSysUser" resultType="java.lang.Long">
+        SELECT
+        count(id )
+
+        FROM erpsysuser where
+        <include refid="whereSelectiveSql"/>
+        1=1
+    </select>
+
+
+    <!--根据主键id，查找erpsysuser表的唯一数据-->
+    <select id="queryByPrimaryKey" parameterType="Integer" resultType="ErpSysUser">
+
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM erpsysuser where id = #{id}
+    </select>
+
+    <!--根据主键id，删除erpsysuser表的唯一数据-->
+    <delete id="deleteByPrimaryKey" parameterType="Integer">
+        DELETE FROM erpsysuser WHERE id = #{id}
+    </delete>
+
+    <!--根据主键id，更新erpsysuser表相应数据-->
+    <update id="updateByPrimaryKey" parameterType="ErpSysUser">
+        UPDATE erpsysuser
+        <set>
+            <include refid="updateSetSql"/>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--保存数据-->
+    <insert id="save" parameterType="ErpSysUser">
+        INSERT INTO erpsysuser
+        (
+        <include refid="Base_Column_List_WithOutPk"/>
+        )
+        VALUES
+        (
+        <include refid="Javabean_Column_List_WithOutPk"/>
+        )
+    </insert>
+
+    <!--根据条件，分页查找erpsysuser表相应数据-->
+    <select id="queryBySelectiveForPagination" parameterType="ErpSysUser" resultType="ErpSysUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM erpsysuser where
+        <include refid="whereQuerySelectiveSql"/>
+        1=1
+        order by id desc LIMIT #{startRow} , #{pageSize}
+    </select>
+
+
+    <select id="queryByUserErp" parameterType="java.lang.String" resultType="ErpSysUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM erpsysuser WHERE userErp=#{userErp} and 1=1
+    </select>
+
+    <update id="updateByUserErp" parameterType="ErpSysUser">
+        UPDATE erpsysuser
+        <set>
+            <include refid="updateSetSql"/>
+        </set>
+        WHERE userErp=#{userErp} and 1=1
+    </update>
+
+
+    <!--erpsysuser表所有字段-->
+    <sql id="Base_Column_List">
+        id ,   <!---->
+        userErp ,   <!---->
+        username ,   <!---->
+        userType ,   <!---->
+        sysCodes ,   <!---->
+        operateErp ,   <!---->
+        enable ,   <!---->
+        createDate ,   <!---->
+        updateTime     <!---->
+    </sql>
+
+    <!--erpsysuser表除了主键id的所有字段-->
+    <sql id="Base_Column_List_WithOutPk">
+        userErp ,  <!---->
+        username ,  <!---->
+        userType ,  <!---->
+        sysCodes ,  <!---->
+        operateErp ,  <!---->
+        enable ,  <!---->
+        createDate ,  <!---->
+        updateTime        <!---->
+    </sql>
+
+    <!--javabean除了主键id的所有字段-->
+    <sql id="Javabean_Column_List_WithOutPk">
+        #{userErp} ,                     <!---->
+        #{username} ,                     <!---->
+        #{userType} ,                     <!---->
+        #{sysCodes} ,                     <!---->
+        #{operateErp} ,                     <!---->
+        1 ,
+        <!---->
+        now() ,                     <!---->
+        now()                 <!---->
+    </sql>
+
+
+    <sql id="updateSetSql">
+        <if test="id != null">
+            id=#{id},
+        </if>
+        <if test="userErp != null">
+            userErp=#{userErp},
+        </if>
+        <if test="username != null">
+            username=#{username},
+        </if>
+        <if test="userType != null">
+            userType=#{userType},
+        </if>
+        <if test="sysCodes != null">
+            sysCodes=#{sysCodes},
+        </if>
+        <if test="operateErp != null">
+            operateErp=#{operateErp},
+        </if>
+        <if test="enable != null">
+            enable=#{enable},
+        </if>
+        <if test="createDate != null and createDate!=''">
+            createDate=#{createDate},
+        </if>
+        <if test="updateTime != null">
+            updateTime= now(),
+        </if>
+    </sql>
+
+
+    <sql id="whereQuerySelectiveSql">
+        <if test="query!= null">
+            <if test="query.id != null">
+                id = #{query.id} and
+            </if>
+
+            <if test="query.userErp != null and query.userErp!=''">
+                userErp = #{query.userErp} and
+            </if>
+            <if test="query.userErpLike != null and query.userErpLike!=''">
+                userErp like CONCAT('%',#{query.userErpLike},'%') and
+            </if>
+            <if test="query.username != null and query.username!=''">
+                username like CONCAT('%',#{query.username},'%') <!-- #{query.username} --> and
+            </if>
+
+            <if test="query.userType != null">
+                userType = #{query.userType} and
+            </if>
+
+            <if test="query.sysCodes != null and query.sysCodes!=''">
+
+                sysCodes like CONCAT('%',#{query.sysCodes},'%') and
+            </if>
+
+            <if test="query.operateErp != null and query.operateErp!=''">
+                operateErp like CONCAT('%',#{query.operateErp},'%') /*#{query.operateErp} */ and
+            </if>
+
+            <if test="query.enable != null">
+                enable = #{query.enable} and
+            </if>
+
+            <if test="query.createDate != null">
+                createDate = #{query.createDate} and
+            </if>
+
+            <if test="query.updateTime != null">
+                updateTime = #{query.updateTime} and
+            </if>
+
+        </if>
+    </sql>
+
+    <sql id="whereSelectiveSql">
+
+        <if test="id != null">
+            id = #{id} and
+        </if>
+
+        <if test="userErp != null and userErp!=''">
+            userErp = #{userErp} and
+        </if>
+        <if test="userErpLike != null and userErpLike!=''">
+            userErp like CONCAT('%',#{userErpLike},'%') and
+        </if>
+        <if test="username != null and username!=''">
+            username like CONCAT('%',#{username},'%') /*#{username}*/ and
+        </if>
+
+        <if test="userType != null">
+            userType = #{userType} and
+        </if>
+
+        <if test="sysCodes != null and sysCodes!=''">
+            sysCodes like CONCAT('%',#{sysCodes},'%') and
+        </if>
+
+        <if test="operateErp != null and operateErp!=''">
+            operateErp like CONCAT('%',#{operateErp},'%') /*#{operateErp} */ and
+        </if>
+
+        <if test="enable != null">
+            enable = #{enable} and
+        </if>
+
+        <if test="createDate != null">
+            createDate = #{createDate} and
+        </if>
+
+        <if test="updateTime != null">
+            updateTime = #{updateTime} and
+        </if>
+
+
+    </sql>
+</mapper>

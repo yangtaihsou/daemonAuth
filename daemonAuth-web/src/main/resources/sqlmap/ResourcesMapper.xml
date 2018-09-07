@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daemonauth.dao.ResourcesMapper">
+    <sql id="whereSelectiveSql">
+        <if test="query!= null">
+            <if test="query.id != null">
+                and id = #{query.id}
+            </if>
+
+            <if test="query.resourceCode != null and query.resourceCode!=''">
+                and resourcecode = #{query.resourceCode}
+            </if>
+
+            <if test="query.resourceCodeLike != null and query.resourceCodeLike!=''">
+                and resourceCode like CONCAT('%',#{query.resourceCodeLike},'%')  <!--#{query.resourceName}-->
+            </if>
+            <if test="query.resourceName != null and query.resourceName!=''">
+                and resourcename like CONCAT('%',#{query.resourceName},'%')  <!--#{query.resourceName}-->
+            </if>
+
+            <if test="query.nodeType != null">
+                and nodetype = #{query.nodeType}
+            </if>
+
+            <if test="query.parentCode != null and query.parentCode!=''">
+                and parentcode = #{query.parentCode}
+            </if>
+
+            <if test="query.resourceUrl != null and query.resourceUrl!=''">
+                and resourceurl like CONCAT('%',#{query.resourceUrl},'%')   <!--#{query.resourceUrl}-->
+            </if>
+
+            <if test="query.display != null">
+                and display = #{query.display}
+            </if>
+
+            <if test="query.enable != null">
+                and enable = #{query.enable}
+            </if>
+
+            <if test="query.createDate != null">
+                and createDate = #{query.createDate}
+            </if>
+
+            <if test="query.updateTime != null">
+                and updateTime = #{query.updateTime}
+            </if>
+            <if test="query.displayIndex != null">
+                and displayIndex = #{query.displayIndex}
+            </if>
+            <if test="query.resourceIcon != null">
+                and resourceIcon = #{query.resourceIcon}
+            </if>
+            <if test="query.systemCode != null">
+                and systemCode = #{query.systemCode}
+            </if>
+            <if test="query.resourceId != null">
+                and resourceId = #{query.resourceId}
+            </if>
+
+            <if test="query.systemCodeList != null and query.systemCodeList!=''">
+                and systemcode in
+                <foreach item="item" index="index" collection="query.systemCodeList" open="("
+                         separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+    </sql>
+
+    <!--resources表所有字段-->
+    <sql id="Base_Column_List">
+        id ,   <!---->
+        resourcecode ,   <!---->
+        resourcename ,   <!---->
+        nodetype ,   <!---->
+        parentcode ,   <!---->
+        resourceurl ,   <!---->
+        display ,   <!---->
+        displayIndex,
+        enable ,   <!---->
+        createDate ,   <!---->
+        updateTime ,    <!---->
+        resourceIcon ,   <!---->
+
+        systemCode,
+        resourceId
+    </sql>
+
+    <!--resources表除了主键id的所有字段-->
+    <sql id="Base_Column_List_WithOutPk">
+        resourcecode ,  <!---->
+        resourcename ,  <!---->
+        nodetype ,  <!---->
+        parentcode ,  <!---->
+        resourceurl ,  <!---->
+        display ,  <!---->
+        displayIndex,
+        enable ,  <!---->
+        createDate ,  <!---->
+        updateTime ,    <!---->
+        resourceIcon ,    <!---->
+        systemCode,
+        resourceId
+    </sql>
+
+    <!--javabean除了主键id的所有字段-->
+    <sql id="Javabean_Column_List_WithOutPk">
+        #{resourceCode} ,                    <!---->
+        #{resourceName} ,                    <!---->
+        #{nodeType} ,                    <!---->
+        #{parentCode} ,                    <!---->
+        #{resourceUrl} ,                    <!---->
+        1 ,                        <!---->
+        #{displayIndex},
+        1 ,                        <!---->
+        now() ,                        <!---->
+        now(),                         <!---->
+        #{resourceIcon},
+        #{systemCode},
+        #{resourceId}
+    </sql>
+
+    <!--查找resources表所有数据-->
+    <select id="findAll" resultType="Resources">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM resources order by displayIndex
+    </select>
+    <!--统计resources表的数据总量-->
+    <select id="findCount" parameterType="Integer" resultType="java.lang.Long">
+        SELECT count(id )
+        FROM resources where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找resources表相应数据-->
+    <select id="queryBySelective" parameterType="Resources" resultType="Resources">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM resources where 1=1
+        <include refid="whereSelectiveSql"/>
+        order by displayIndex
+    </select>
+
+    <!--根据条件，查找resources表相应数据的总量-->
+    <select id="queryCountBySelective" parameterType="Resources" resultType="java.lang.Long">
+        SELECT
+        count(id )
+
+        FROM resources where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据主键id，查找resources表的唯一数据-->
+    <select id="queryByPrimaryKey" parameterType="Integer" resultType="Resources">
+
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM resources where id = #{id}
+    </select>
+
+    <!--根据主键id，删除resources表的唯一数据-->
+    <delete id="deleteByPrimaryKey" parameterType="Integer">
+        DELETE FROM resources WHERE id = #{id}
+    </delete>
+
+
+    <!--根据主键id，更新resources表相应数据-->
+    <update id="updateByPrimaryKeySelective" parameterType="Resources">
+        UPDATE resources
+        <set>
+            <if test="id != null">
+                id=#{id},
+            </if>
+            <if test="resourceCode != null">
+                resourcecode=#{resourceCode},
+            </if>
+            <if test="resourceName != null">
+                resourcename=#{resourceName},
+            </if>
+            <if test="nodeType != null">
+                nodetype=#{nodeType},
+            </if>
+            <if test="parentCode != null">
+                parentcode=#{parentCode},
+            </if>
+            <if test="resourceUrl != null">
+                resourceurl=#{resourceUrl},
+            </if>
+            <if test="display != null">
+                display=#{display},
+            </if>
+            <if test="displayIndex != null">
+                displayIndex=#{displayIndex},
+            </if>
+
+
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="createDate != null">
+                createDate=#{createDate},
+            </if>
+            <if test="updateTime != null">
+                updateTime=#{updateTime},
+            </if>
+            <if test="resourceIcon != null">
+                resourceIcon=#{resourceIcon},
+            </if>
+            <if test="systemCode != null">
+                systemCode=#{systemCode},
+            </if>
+            <if test="resourceId != null">
+                resourceId=#{resourceId}
+            </if>
+
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--保存数据-->
+    <insert id="save" parameterType="Resources">
+        INSERT INTO resources
+        (
+        <include refid="Base_Column_List_WithOutPk"/>
+        )
+        VALUES
+        (
+        <include refid="Javabean_Column_List_WithOutPk"/>
+        )
+    </insert>
+
+    <!--根据条件，分页查找resources表相应数据-->
+    <select id="queryBySelectiveForPagination" parameterType="Resources" resultType="Resources">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM resources where 1=1
+        <include refid="whereSelectiveSql"/>
+        order by displayIndex LIMIT #{startRow} , #{pageSize}
+    </select>
+
+    <!--根据条件，分页查找resources表相应数据的总量-->
+    <select id="queryCountBySelectiveForPagination" parameterType="Resources" resultType="java.lang.Long">
+        SELECT
+        count(id )
+        FROM resources where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+
+    <delete id="deleteByUniqueIndexresourceCode" parameterType="Resources">
+            DELETE FROM resources WHERE      resourcecode=#{resourceCode} and   1=1
+        </delete>
+
+    <!--   将根节点的systemCode设置自己的编码-->
+    <select id="queryByUniqueIndexresourceCode" parameterType="java.lang.String" resultType="Resources">
+    select  *  from  resources where  resourcecode=#{resourceCode}
+        </select>
+
+
+</mapper>

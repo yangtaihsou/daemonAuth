@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daemonauth.dao.UsersMapper">
+    <sql id="whereSelectiveSql">
+        <if test="query!= null">
+            <if test="query.id != null">
+                and id = #{query.id}
+            </if>
+
+            <if test="query.userPin != null and query.userPin!=''">
+                and userpin = #{query.userPin}
+            </if>
+            <if test="query.userPinLike != null and query.userPinLike!=''">
+                and userPin like CONCAT('%',#{query.userPinLike},'%')   <!--#{query.userPinLike}-->
+            </if>
+            <if test="query.userName != null and query.userName!=''">
+                and username like CONCAT('%',#{query.userName},'%')   <!--#{query.userName}-->
+            </if>
+
+            <if test="query.enable != null">
+                and enable = #{query.enable}
+            </if>
+
+            <if test="query.createDate != null">
+                and createDate = #{query.createDate}
+            </if>
+
+            <if test="query.updateTime != null">
+                and updateTime = #{query.updateTime}
+            </if>
+
+        </if>
+    </sql>
+
+    <!--users表所有字段-->
+    <sql id="Base_Column_List">
+        id ,   <!---->
+        userpin ,   <!---->
+        username ,   <!---->
+        enable ,   <!---->
+        email,
+        tel,
+        operateErp,
+        sysCodes,
+        createDate ,   <!---->
+        updateTime     <!---->
+    </sql>
+
+    <!--users表除了主键id的所有字段-->
+    <sql id="Base_Column_List_WithOutPk">
+        userpin ,  <!---->
+        username ,  <!---->
+        enable ,  <!---->
+        email,
+        tel,
+        operateErp,
+        sysCodes,
+        createDate ,  <!---->
+        updateTime        <!---->
+    </sql>
+
+    <!--javabean除了主键id的所有字段-->
+    <sql id="Javabean_Column_List_WithOutPk">
+        #{userPin} ,                    <!---->
+        #{userName} ,                    <!---->
+        1 ,                        <!---->
+        #{email} ,
+        #{tel} ,
+        #{operateErp} ,
+        #{sysCodes} ,
+        now() ,                        <!---->
+        now()                         <!---->
+    </sql>
+
+    <!--查找users表所有数据-->
+    <select id="findAll" resultType="Users">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+    </select>
+    <!--统计users表的数据总量-->
+    <select id="findCount" parameterType="Integer" resultType="java.lang.Long">
+        SELECT count(id )
+        FROM users where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找users表相应数据-->
+    <select id="queryBySelective" parameterType="Users" resultType="Users">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找users表相应数据的总量-->
+    <select id="queryCountBySelective" parameterType="Users" resultType="java.lang.Long">
+        SELECT
+        count(id )
+
+        FROM users where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据主键id，查找users表的唯一数据-->
+    <select id="queryByPrimaryKey" parameterType="Integer" resultType="Users">
+
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users where id = #{id}
+    </select>
+
+    <!--根据主键id，删除users表的唯一数据-->
+    <delete id="deleteByPrimaryKey" parameterType="Integer">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <!--根据主键id，更新users表相应数据-->
+    <update id="updateByPrimaryKeySelective" parameterType="Users">
+        UPDATE users
+        <set>
+            updateTime=now(),
+            <if test="id != null">
+                id=#{id},
+            </if>
+            <if test="userPin != null">
+                userpin=#{userPin},
+            </if>
+            <if test="userName != null">
+                username=#{userName},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="createDate != null">
+                createDate=#{createDate},
+            </if>
+
+            <if test="email != null">
+                email=#{email},
+            </if>
+            <if test="tel != null">
+                tel=#{tel},
+            </if>
+            <if test="operateErp != null">
+                operateErp=#{operateErp},
+            </if>
+            <if test="sysCodes != null">
+                sysCodes=#{sysCodes},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByPin" parameterType="Users">
+        UPDATE users
+        <set>
+            <if test="userName != null">
+                username=#{userName},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="createDate != null">
+                createDate=#{createDate},
+            </if>
+            <if test="updateTime != null">
+                updateTime=#{updateTime},
+            </if>
+            <if test="email != null">
+                email=#{email},
+            </if>
+            <if test="tel != null">
+                tel=#{tel},
+            </if>
+            <if test="operateErp != null">
+                operateErp=#{operateErp},
+            </if>
+            <if test="sysCodes != null">
+                sysCodes=#{sysCodes},
+            </if>
+        </set>
+        WHERE userpin=#{userPin}
+    </update>
+
+    <!--保存数据-->
+    <insert id="save" parameterType="Users">
+        INSERT INTO users
+        (
+        <include refid="Base_Column_List_WithOutPk"/>
+        )
+        VALUES
+        (
+        <include refid="Javabean_Column_List_WithOutPk"/>
+        )
+    </insert>
+
+    <!--根据条件，分页查找users表相应数据-->
+    <select id="queryBySelectiveForPagination" parameterType="Users" resultType="Users">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users where 1=1
+        <include refid="whereSelectiveSql"/>
+        order by id desc LIMIT #{startRow} , #{pageSize}
+    </select>
+
+
+    <!--根据条件，分页查找users表相应数据的总量-->
+    <select id="queryCountBySelectiveForPagination" parameterType="Users" resultType="java.lang.Long">
+        SELECT
+        count(id )
+        FROM users where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+
+    <delete id="deleteByUniqueIndexuserPin" parameterType="Users">
+            DELETE FROM users WHERE      userpin=#{userPin} and   1=1
+        </delete>
+
+</mapper>

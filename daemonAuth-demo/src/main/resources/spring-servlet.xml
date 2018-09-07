@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="true">
+    <aop:aspectj-autoproxy/>
+    <context:annotation-config />
+    <context:component-scan base-package="com.daemonauth.demo"></context:component-scan>
+    <mvc:annotation-driven/>
+
+
+
+    <mvc:resources mapping="/static/**" location="/static/"/>
+
+    <mvc:resources mapping="/**.html" location="/"/>
+
+    <mvc:resources mapping="/statics/**" location="/statics/"/>
+
+    <!-- Velocity视图解析器    默认视图  -->
+    <bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="viewNames" value="*html" />
+        <!--      <property name="suffix" value=""/>-->
+        <property name="dateToolAttribute" value="date" />
+        <property name="numberToolAttribute" value="number" /><!--
+        <property name="toolboxConfigLocation" value="/WEB-INF/velocity-toolbox.xml" />-->
+        <property name="requestContextAttribute" value="rc"/>
+        <property name="order" value="0"/>
+    </bean>
+
+    <bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/WEB-INF/page/" />
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- JSP视图解析器  -->
+    <bean id="viewResolverJsp" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="viewNames" value="*jsp" />
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="suffix" value=""/>
+        <property name="order" value="1"/>
+    </bean>
+</beans>

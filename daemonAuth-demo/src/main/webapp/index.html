@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>帝门权限系统sdk-demo页面</title>
+    <meta charset="UTF-8" />
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/extend.css"   rel="stylesheet">
+    <link href="/static/bootstrap/blog.css" rel="stylesheet">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/DaemonAuthority.js?t=2343240234"></script>
+    <script src="/static/js/map.js"></script>
+</head>
+<body>
+
+<!--<div class="blog-masthead">
+    <div class="blog_container ">
+        <nav class="blog-nav" id="menuDiv">
+        </nav>
+    </div>
+</div>-->
+<div  id="menuDiv">
+</div>
+</body>
+</html>
+<script>
+    jQuery(document).ready(function () {
+        loadAuth();
+    });
+    function loadAuth() {//加载权限相关
+        var authority = new DaemonAuthority.getInstance();
+        var authOptions = {//自定义属性
+            'menuLoadUrl': "/page/menu",//查询页签
+            'menuId': "menuDiv",//append页签的id
+            'uriLoadUrl': "/page/uriResourceList",//查询用户拥有url的请求地址
+            'loadAfterMenuMethod':{//页签加载完毕，执行的方法集合
+                '0':menu_resourceClick,
+                '1':menu_resourceClick
+            }
+        };
+        authority.auth(authOptions);
+    }
+    function menu_resourceClick(){
+        //绑定menu页签监听事件
+    }
+</script>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daemonauth.dao.RolesMapper">
+    <sql id="whereSelectiveSql">
+        <if test="query!= null">
+            <if test="query.id != null">
+                and id = #{query.id}
+            </if>
+
+            <if test="query.roleCode != null and query.roleCode!=''">
+                and rolecode = #{query.roleCode}
+            </if>
+            <if test="query.roleCodeLike != null and query.roleCodeLike!=''">
+                and roleCode like CONCAT('%',#{query.roleCodeLike},'%')
+            </if>
+
+            <if test="query.roleName != null and query.roleName!=''">
+                and rolename like CONCAT('%',#{query.roleName},'%')  <!--#{query.roleName}-->
+            </if>
+
+            <if test="query.systemCode != null and query.systemCode!=''">
+                and systemcode = #{query.systemCode}
+
+            </if>
+            <if test="query.systemCodeList != null and query.systemCodeList!=''">
+                and systemcode in
+                <foreach item="item" index="index" collection="query.systemCodeList" open="("
+                         separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.enable != null">
+                and enable = #{query.enable}
+            </if>
+
+            <if test="query.createDate != null">
+                and createDate = #{query.createDate}
+            </if>
+
+            <if test="query.updateTime != null">
+                and updateTime = #{query.updateTime}
+            </if>
+
+        </if>
+    </sql>
+
+    <!--roles表所有字段-->
+    <sql id="Base_Column_List">
+        id ,   <!---->
+        rolecode ,   <!---->
+        rolename ,   <!---->
+        systemcode ,   <!---->
+        enable ,   <!---->
+        createDate ,   <!---->
+        updateTime     <!---->
+    </sql>
+
+    <!--roles表除了主键id的所有字段-->
+    <sql id="Base_Column_List_WithOutPk">
+        rolecode ,  <!---->
+        rolename ,  <!---->
+        systemcode ,  <!---->
+        enable ,  <!---->
+        createDate ,  <!---->
+        updateTime        <!---->
+    </sql>
+
+    <!--javabean除了主键id的所有字段-->
+    <sql id="Javabean_Column_List_WithOutPk">
+        #{roleCode} ,                    <!---->
+        #{roleName} ,                    <!---->
+        #{systemCode} ,                    <!---->
+        1 ,                        <!---->
+        now() ,                        <!---->
+        now()                         <!---->
+    </sql>
+
+    <!--查找roles表所有数据-->
+    <select id="findAll" resultType="Roles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles
+    </select>
+    <!--统计roles表的数据总量-->
+    <select id="findCount" parameterType="Integer" resultType="java.lang.Long">
+        SELECT count(id )
+        FROM roles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找roles表相应数据-->
+    <select id="queryBySelective" parameterType="Roles" resultType="Roles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据条件，查找roles表相应数据的总量-->
+    <select id="queryCountBySelective" parameterType="Roles" resultType="java.lang.Long">
+        SELECT
+        count(id )
+
+        FROM roles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+    <!--根据主键id，查找roles表的唯一数据-->
+    <select id="queryByPrimaryKey" parameterType="Integer" resultType="Roles">
+
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles where id = #{id}
+    </select>
+
+    <!--根据主键id，删除roles表的唯一数据-->
+    <delete id="deleteByPrimaryKey" parameterType="Integer">
+        DELETE FROM roles WHERE id = #{id}
+    </delete>
+
+    <!--根据主键id，更新roles表相应数据-->
+    <update id="updateByPrimaryKeySelective" parameterType="Roles">
+        UPDATE roles
+        <set>
+            <if test="id != null">
+                id=#{id},
+            </if>
+            <if test="roleCode != null">
+                rolecode=#{roleCode},
+            </if>
+            <if test="roleName != null">
+                rolename=#{roleName},
+            </if>
+            <if test="systemCode != null">
+                systemcode=#{systemCode},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="createDate != null">
+                createDate=#{createDate},
+            </if>
+            <if test="updateTime != null">
+                updateTime=#{updateTime},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--保存数据-->
+    <insert id="save" parameterType="Roles">
+        INSERT INTO roles
+        (
+        <include refid="Base_Column_List_WithOutPk"/>
+        )
+        VALUES
+        (
+        <include refid="Javabean_Column_List_WithOutPk"/>
+        )
+    </insert>
+
+    <!--根据条件，分页查找roles表相应数据-->
+    <select id="queryBySelectiveForPagination" parameterType="Roles" resultType="Roles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles where 1=1
+        <include refid="whereSelectiveSql"/>
+        order by id desc LIMIT #{startRow} , #{pageSize}
+    </select>
+
+    <!--根据条件，分页查找roles表相应数据的总量-->
+    <select id="queryCountBySelectiveForPagination" parameterType="Roles" resultType="java.lang.Long">
+        SELECT
+        count(id )
+        FROM roles where 1=1
+        <include refid="whereSelectiveSql"/>
+    </select>
+
+
+    <delete id="deleteByUniqueIndexroleCode" parameterType="Roles">
+            DELETE FROM roles WHERE      rolecode=#{roleCode} and   1=1
+        </delete>
+
+    <delete id="deleteByCommonIndexsystemCode" parameterType="Roles">
+            DELETE FROM roles WHERE      systemcode=#{systemCode} and   1=1
+        </delete>
+</mapper>

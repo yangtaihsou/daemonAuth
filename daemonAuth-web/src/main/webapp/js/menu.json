@@ -1,0 +1,61 @@
+{
+  "menuList": [
+    {
+      "icon": "fa fa-calendar",
+      "isShow": 1,
+      "menuId": 2,
+      "name": "资源管理",
+      "open": null,
+      "orderNum": 1,
+      "parentId": 1,
+      "parentName": null,
+      "perms": null,
+      "type": 1,
+      "updateTime": null,
+      "url": "/sys/resource_mng.html"
+    },
+    {
+      "icon": "fa fa-tasks",
+      "isShow": 1,
+      "menuId": 3,
+      "name": "角色管理",
+      "open": null,
+      "orderNum": 1,
+      "parentId": 1,
+      "parentName": null,
+      "perms": null,
+      "type": 1,
+      "updateTime": null,
+      "url": "/sys/role_mng.html"
+    },
+    {
+      "icon": "fa fa-tasks",
+      "isShow": 1,
+      "menuId": 4,
+      "name": "用户管理",
+      "open": null,
+      "orderNum": 1,
+      "parentId": 1,
+      "parentName": null,
+      "perms": null,
+      "type": 1,
+      "updateTime": null,
+      "url": "/sys/user_mng.html"
+    },
+    {
+      "icon": "fa fa-tasks",
+      "isShow": 1,
+      "menuId": 5,
+      "name": "本系统用户管理",
+      "open": null,
+      "orderNum": 1,
+      "parentId": 1,
+      "parentName": null,
+      "perms": null,
+      "type": 1,
+      "updateTime": null,
+      "url": "/sys/erpsysuser_mng.html"
+    }
+  ],
+  "code": 0
+}

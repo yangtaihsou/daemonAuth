@@ -1,0 +1,63 @@
+
+    /*    $('button[name=dynamicTable]').live('click',function(){
+     view.addDynamicTable( $(this).attr("tag"));
+     })*/
+    /*    $('button[name=delDynamicTable]').live('click',function(){
+     $(this).parent().parent().remove();
+     view.reloadIndex( $(this).attr("tag"));
+     })*/
+/*    $('button[name=importPrices]').live('click',function(){
+        *//* $('#priceList').click();
+         $('#leftSidebar li>a:last-child').click();*//*
+        var productCode =$(this).attr('productCode');
+        var values = productCode.split("#");
+        var productCode = values[0];
+        var productName = values[1];
+        var paraData = "productCode="+productCode+"&productName="+productName;
+        view.toImportPrices.request(paraData);
+    } )*/
+
+
+    /*    $('#priceAddBtn').live('click',function(){
+     view.priceAdd.request();
+     } )*/
+
+    /*    $('#productAddBtn').live('click',function(){
+     view.productAddBtn.request();
+     } )*/
+
+    /*
+     $('button[name=viewPrices]').live('click',function(){
+     */
+    /* $('#priceList').click();
+     $('#leftSidebar li>a:last-child').click();*//*
+
+     var productCode =$(this).attr('productCode');
+     var values = productCode.split("#");
+     var productCode = values[0];
+     var productName = values[1];
+     var paraData = "productCode="+productCode+"&productName="+productName;
+     view.viewPrices.request(paraData);
+     } )
+     */
+
+
+    /*    $('button[name=productEditBtn]').live('click',function(){
+     view.productEditSubmit.request();
+     })*/
+    /*    $('button[name=broadcastAlbumAddBtn]').live('click',function(){
+     view['broadcastAlbumAdd']['request']();
+     })*/
+
+
+    /*    $('button[name=editProduct]').live('click',function(){
+     var key =$(this).attr('key');
+     var paraData = "id="+key;
+     view.editProduct.request(paraData);
+     })*/
+
+    /*    $('button[name=copyProduct]').live('click',function(){
+     var key =$(this).attr('key');
+     var paraData = "id="+key;
+     view.copyProduct.request(paraData);
+     })*/

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+       default-autowire="byName">
+    <bean id="httpClient" class="com.daemonauth.export.proxy.PoolingHttpClient">
+        <property name="connectTimeout" value="10000"></property>
+        <property name="readTimeout" value="50000"></property>
+        <property name="waitTimeout" value="1000"></property>
+        <property name="totalMaxConnection" value="2000"></property>
+    </bean>
+
+    <bean id="authorityResource" class="com.daemonauth.export.proxy.RestResourceClientProxyFactoryBean">
+        <property name="serviceInterface" value="com.daemonauth.export.rpc.AuthorityResourceService"></property>
+        <!--192.168.146.62 auth.jr.jd.com    线上使用http://auth.lc.jd.com/-->
+        <property name="baseUri" value="http://127.0.0.1/"></property>
+        <property name="httpClient" ref="httpClient"></property>
+    </bean>
+    <bean id="authCheck" class="com.daemonauth.demo.AuthorityCheckService">
+        <!---profiles用设置编译环境。后续用于判断是否绕过权限验证-->
+        <property name="profiles" value="${profiled}"/>
+    </bean>
+
+
+    <bean id="authorityData" class="com.daemonauth.export.AuthorityResourcesLoad">
+        <!--单位毫秒。超过1分钟，系统自动设置为1分钟-->
+        <property name="refreshTime" value="6000"></property>
+                <property name="systemCode" value="bigoneyy"/>
+            </bean>
+
+    <mvc:interceptors>
+        <bean class="com.daemonauth.demo.AuthorityInterceptor" >
+            <!--指定排除url,一般为静态资源-->
+            <property name="excludePath" value="/static,/index.html,/404.html,/500.html,/501.html,/page/menu,/page/uriResourceList,/jsp/index,/jsp/page"/>
+        </bean>
+    </mvc:interceptors>
+</beans>
